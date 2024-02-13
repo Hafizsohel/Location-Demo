@@ -59,7 +59,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getLastLocation();
     }
 
-
     private void displayLocationName() {
         Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
         try {
@@ -68,25 +67,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Address address = addresses.get(0);
                 StringBuilder addressBuilder = new StringBuilder();
 
-                String floor = address.getSubThoroughfare();
-                if (floor != null && !floor.isEmpty()) {
-                    addressBuilder.append("Floor ").append(floor).append(", ");
-                }
-
-                for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                    String addressLine = address.getAddressLine(i);
-                    if (addressLine != null && !addressLine.isEmpty()) {
-                        addressBuilder.append(addressLine);
-                        if (i < address.getMaxAddressLineIndex()) {
-                            addressBuilder.append(", ");
-                        }
-                    }
+                String addressLine = address.getAddressLine(0);
+                if (addressLine != null && !addressLine.isEmpty()) {
+                    addressBuilder.append(addressLine);
                 }
                 Toast.makeText(MapsActivity.this, "Current Location: " + addressBuilder.toString(), Toast.LENGTH_LONG).show();
+
+
                 LatLng newLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 myMap.clear();
                 myMap.addMarker(new MarkerOptions().position(newLatLng).title("My Location"));
-                myMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLatLng, 15));
             } else {
                 Toast.makeText(MapsActivity.this, "Location not found", Toast.LENGTH_SHORT).show();
             }
